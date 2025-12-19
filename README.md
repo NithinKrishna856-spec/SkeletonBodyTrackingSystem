@@ -159,35 +159,84 @@ pip install -r requirements.txt
 
 ## ▶️ How to Run
 
-### Running the Python Backend
+**Important:** This project requires running **two components** in order: 
+1. Python backend (for pose estimation and data streaming)
+2. Unity frontend (for visualization)
 
-1. Connect the Orbbec Gemini 336L sensor to your computer
-2. Navigate to the project directory
-3. Run the main script:
-   ```bash
-   python main.py
-   ```
-4. The script will:
-   - Initialize the depth sensor
-   - Start pose estimation
-   - Begin transmitting data via UDP to Unity
+### **Step 1: Start the Python Backend**
 
-**Keyboard Controls:**
+#### On Windows:
+Double-click `start_backend.bat` or run in terminal:
+```bash
+start_backend.bat
+```
+
+#### On Mac/Linux:
+```bash
+./start_backend.sh
+```
+
+**Or manually:**
+```bash
+python main.py
+```
+
+**What to expect:**
+- The Orbbec sensor will initialize
+- MediaPipe will start pose estimation
+- Skeleton data will be streamed via UDP on port 5065
+- Console will show frame-by-frame processing
+
+**Keyboard Controls (in Python backend):**
 - Press `S` - Start CSV logging
 - Press `Q` - Quit the application
 
-### Running the Unity Frontend
+**⚠️ Keep this window open while using Unity!**
 
-1. Open the project in Unity Hub
-2. Navigate to `Assets/Scenes/` and open the `SkeletonTest` scene
-3. Click the **Play** button in Unity Editor
-4. The skeleton visualization will appear once data is received from Python
+---
 
-### Running Both Together
+### **Step 2: Start the Unity Frontend**
 
-1. Start the Python backend first (run `main.py`)
-2. Then start the Unity frontend (press Play in Unity)
-3. You should see real-time skeleton tracking and visualization
+1. Open **Unity Hub**
+2. Open the **SkeletonBodyTrackingSystem** project
+3. Navigate to `Assets/Scenes/`
+4. Open the `SkeletonTest` scene
+5. Click the **Play** button
+
+**What to expect:**
+- Unity will connect to the Python backend via UDP
+- Skeleton joints will appear as spheres
+- Bones will connect the joints
+- Joint angles will display in the UI overlay
+
+---
+
+### **Troubleshooting**
+
+#### Python backend won't start: 
+- **Check Python installation:** `python --version` (should be 3.8+)
+- **Install dependencies:** `pip install -r requirements.txt`
+- **Check sensor connection:** Ensure Orbbec Gemini 336L is plugged in
+
+#### Unity shows no skeleton:
+- **Verify Python is running:** Check that `main.py` is active
+- **Check UDP port:** Default is 5065 (verify firewall settings)
+- **Check console:** Look for connection errors in Unity Console
+
+#### Skeleton is jittery:
+- Adjust smoothing factor in `main.py` (default α = 0.5)
+- Ensure good lighting conditions
+- Check sensor positioning (1-3 meters from subject)
+
+---
+
+### **Quick Start Workflow**
+
+```
+1. Connect Orbbec sensor → 2. Run start_backend.bat → 3. Open Unity → 4. Press Play
+```
+
+**⚠️ Always start the Python backend BEFORE pressing Play in Unity!**
 
 ---
 
